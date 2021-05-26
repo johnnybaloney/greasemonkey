@@ -3,7 +3,7 @@
 // @namespace     https://github.com/johnnybaloney
 // @description   Shows the info in a simple table instead of having it scattered all over the page.
 // @require https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js
-// @include       https://www.hl.co.uk/funds/fund-discounts,-prices--and--factsheets/search-results/*
+// @include       /^https://www.hl.co.uk/funds/fund-discounts,-prices--and--factsheets/search-results/[a-z]/[^/]*$/
 // ==/UserScript==
 let factsheetTable = Object.values($('.factsheet-table'))
 let charges1 = factsheetTable[0]
