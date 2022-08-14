@@ -7,8 +7,13 @@
 // ==/UserScript==
 
 // TODO:
+// - Doesn't always kick in on first page load, requires a page refresh.
 // - The search form gets axed together with the right panel. Move the search to the left panel.
 
+// Let Twitter loads all its stuff first.
+const INITIAL_DELAY_RIGHT_PANEL_MS = 4000;
+const INITIAL_DELAY_WIDENING_MS = 4500;
+// Interval for checking for junk in the main feed.
 const MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS = 5000;
 
 /*
@@ -110,7 +115,7 @@ const sidebarLocator = "div[data-testid='sidebarColumn']";
 const removeSidebarColumn = () => jQuery(sidebarLocator).remove();
 waitForKeyElements(
   sidebarLocator,
-  removeSidebarColumn
+  setTimeout(removeSidebarColumn, INITIAL_DELAY_RIGHT_PANEL_MS)
 );
 
 // Widens main feed.
@@ -148,7 +153,7 @@ function widenMainFeed() {
 
 waitForKeyElements(
   mainFeedLocator,
-  widenMainFeed
+  setTimeout(widenMainFeed, INITIAL_DELAY_WIDENING_MS)
 );
 
 // Periodically removes 'See more' spam in the main feed.
