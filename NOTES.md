@@ -54,3 +54,22 @@ A utility function that detects and handles AJAXed content.
 ```
 // @require https://cdn.jsdelivr.net/gh/CoeJoder/waitForKeyElements.js@v1.2/waitForKeyElements.js
 ```
+
+## Hacks
+
+### Adding jQuery in Web Console
+
+When jQuery is not available on the web page one way to add it is to get [a minified version](https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js) is simply paste it into the web console.
+
+```
+>> jQuery
+
+Uncaught ReferenceError: jQuery is not defined
+    <anonymous> debugger eval code:1
+
+>> ...pasting minified jQuery...
+true
+
+>> jQuery
+function k(e, t)
+```
