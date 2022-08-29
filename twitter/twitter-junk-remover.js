@@ -149,45 +149,39 @@ const insertSearch = () => {
 }
 
 /**
- * Widens main feed.
- * TODO: Does not work on the search page.
+ * Widens the 'primary column', e.g. main feed or search results.
  */
-const widenMainFeed = () => {
-  console.log("Widening main feed...");
-  const mainFeedLocator = "div[aria-label='Home timeline']";
-  const _widenMainFeed = () => {
-    console.log('STARTING feed widening');
-    const replacements = [];
-    const children = jQuery(mainFeedLocator).children();
-    const cssClassNameMap = {};
-    for (let i = 0; i < children.length; ++i) {
-      jQuery(children[i]).attr("class").split(/\s+/).map((name) => '.' + name).forEach((name) => cssClassNameMap[name] = true);
-    }
+const widenPrimaryColumn = () => {
+  const _widenPrimaryColumn = () => {
+    console.log("Widening primary column...");
+    const ORIGINAL_COLUMN_WIDTH_SETTING = 'max-width: 600px';
+    const DESIRED_COLUMN_WIDTH_SETTING = 'max-width: none';
     // messing with css stylesheets...
     const sheets = document.styleSheets;
+    const replacements = [];
     for (let sheetIx = 0; sheetIx < sheets.length; ++sheetIx) {
       const rules = sheets[sheetIx].cssRules;
       const insertionPoint = rules.length;
       for (let ruleIx = 0; ruleIx < insertionPoint; ++ruleIx) {
-        if (cssClassNameMap[rules[ruleIx].selectorText] === true) {
-          if (rules[ruleIx].cssText.indexOf('max-width') === -1) continue;
-          // look for the css property restricting the width of the feed
-          const newText = rules[ruleIx].cssText.replace('max-width: 600px', 'max-width: none');
+        if (rules[ruleIx].cssText.includes('max-width')) {
+          // look for the css property restricting the width of the primary column
+          const updatedCssText = rules[ruleIx].cssText.replace(ORIGINAL_COLUMN_WIDTH_SETTING, DESIRED_COLUMN_WIDTH_SETTING);
+          console.log(rules[ruleIx].cssText);
           // don't apply the replacement here or the page will get stuck loading
-          replacements.push([sheetIx, newText]);
+          replacements.push({sheetIx, updatedCssText});
         }
       }
     }
     replacements.forEach((r) => {
-      console.log('Replacing style sheet rule...');
-      document.styleSheets[r[0]].insertRule(r[1], document.styleSheets[r[0]].cssRules.length)
+      const stylesheet = document.styleSheets[r.sheetIx];
+      stylesheet.insertRule(r.updatedCssText, stylesheet.cssRules.length)
     });
-    console.log('FINISHED feed widening');
+    console.log('Finsihed primary column widening');
   }
-
+  const primaryColumnLocator = "div[data-testid='primaryColumn']";
   waitForKeyElements(
-    mainFeedLocator,
-    setTimeout(_widenMainFeed, INITIAL_DELAY_WIDENING_MS)
+    primaryColumnLocator,
+    setTimeout(_widenPrimaryColumn, INITIAL_DELAY_WIDENING_MS)
   );
 }
 
@@ -354,7 +348,7 @@ function removeSiblings(startTerm, endTerm, statsKey) {
 }
 
 removeSidebarColumn();
-widenMainFeed();
+widenPrimaryColumn();
 // You must see more, MORE! Never ever leave Twitter, stay hooked...
 setInterval(() => removeArticleJunkOfType(['See more'], 4, COMPARISON_TYPE_IS, 'see more'),
   MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS);
