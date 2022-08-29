@@ -8,10 +8,10 @@
 // @include       /^https?://twitter.com.*$/
 // ==/UserScript==
 
-// Let Twitter loads all its stuff first.
+// Let Twitter load all its stuff first.
 const INITIAL_DELAY_RIGHT_PANEL_MS = 4000;
 const INITIAL_DELAY_WIDENING_MS = 4500;
-// Interval for checking for junk in the main feed.
+// Interval for checking for junk in the main feed. Reduce to clear junk more frequently.
 const MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS = 2500;
 // Interval for logging junk removal statistics.
 const LOG_STATS_INTERVAL_MS = 10000;
@@ -317,8 +317,8 @@ function removePromotedTweetJunk() {
 /**
  * For junk that comes in the form of a bunch of sibling 'article' div's.
  *
- * @param startTerm The span text in the first div in the group. Case sensitive.
- * @param endTerm The span text in the last div in the group. Case sensitive.
+ * @param startTerm The exact span text in the first div in the group. Case sensitive.
+ * @param endTerm The exact span text in the last div in the group. Case sensitive.
  * @param statsKey What key to increase in the stats object.
  */
 function removeSiblings(startTerm, endTerm, statsKey) {
@@ -378,6 +378,9 @@ setInterval(removePromotedTweetJunk,
   MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS);
 // A list of random people Twitter says you should follow.
 setInterval(() => removeSiblings('Who to follow', 'Show more', 'who to follow'),
+  MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS);
+// More people, phrased differently.
+setInterval(() => removeSiblings('People', 'View all', 'who to follow'),
   MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS);
 // A list of random topics Twitter says you should follow.
 setInterval(() => removeSiblings('Topics to follow', 'More Topics', 'topics to follow'),
