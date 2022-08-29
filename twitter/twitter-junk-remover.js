@@ -13,6 +13,8 @@ const INITIAL_DELAY_RIGHT_PANEL_MS = 4000;
 const INITIAL_DELAY_WIDENING_MS = 4500;
 // Interval for checking for junk in the main feed.
 const MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS = 2500;
+// Interval for logging junk removal statistics.
+const LOG_STATS_INTERVAL_MS = 10000;
 
 /**
  * waitForKeyElements():  A utility function, for Greasemonkey scripts, that detects and handles AJAXed content.
@@ -380,5 +382,5 @@ setInterval(() => removeSiblings('Who to follow', 'Show more', 'who to follow'),
 // A list of random topics Twitter says you should follow.
 setInterval(() => removeSiblings('Topics to follow', 'More Topics', 'topics to follow'),
   MAIN_FEED_JUNK_REMOVAL_INTERVAL_MS);
-setInterval(logStats, 10000);
+setInterval(logStats, LOG_STATS_INTERVAL_MS);
 insertSearch();
